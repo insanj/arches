@@ -1,0 +1,43 @@
+{
+  "success": 1,
+  "message": null,
+  "data": {
+    "users": [{
+      "id": 1,
+      "name": "julian",
+      "last_login_date": "Tue, 04 Dec 2018 16:52:42 GMT",
+      "inventory_id": 1,
+      "location_id": 1
+    }],
+    "inventories": [{
+      "id": 1,
+      "location_id": 1,
+      "user_id": 1,
+      "comment": null,
+      "items": [{
+        "name": "dirt",
+        "game_code": "minecraft:dirt",
+        "amount": 64
+      }]
+    }, {
+      "id": 2,
+      "location_id": 2,
+      "user_id": null,
+      "comment": "drop all your items in this chest before mining deeper!",
+      "items": [{
+        "name": "diamond",
+        "game_code": "minecraft:diamond",
+        "amount": 1
+      }]
+    }],
+    "locations": [{
+      "id": 1,
+      "name": "spawn location",
+      "coords": "x,y,z"
+    }, {
+      "id": 2,
+      "name": "cave location",
+      "coords": "x,y,z"
+    }],
+  }
+}
