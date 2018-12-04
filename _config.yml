@@ -1,0 +1,10 @@
+title: arches
+description: 🐚 powerful travelog for gamers built in nodejs & postgresql
+repository_url: https://github.com/insanj/arches
+
+remote_theme: mmistakes/so-simple-theme
+highlighter: rouge
+show_downloads: true
+
+author:
+  name: insanj
