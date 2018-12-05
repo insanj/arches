@@ -1,0 +1,28 @@
+{
+  "name": "arches",
+  "version": "1.0.0",
+  "description": "🐚 powerful travelog for gamers built in nodejs & postgresql",
+  "main": "Arches.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insanj/arches.git"
+  },
+  "author": "insanj",
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/insanj/arches/issues"
+  },
+  "homepage": "https://github.com/insanj/arches#readme",
+  "dependencies": {
+    "express": "latest"
+  },
+  "scripts": {
+    "start" : "node Arches.js"
+  }
+}
