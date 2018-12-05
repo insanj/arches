@@ -1,6 +1,9 @@
 # executables
 ngrok
 
+# studd
+.DS_Store
+
 # Logs
 logs
 *.log
