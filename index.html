@@ -15,9 +15,9 @@
     <title>arches</title>
   </head>
   <body>
-    <!-- Image and text -->
+    <!-- Navbar with Brand Image and text -->
     <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="/">
+      <a style="cursor: pointer;" class="navbar-brand" data-toggle="modal" data-target="#exampleModal">
         <img src="/assets/img/shell.png" width="30" height="30" class="d-inline-block align-top" alt="">
         &nbsp;arches
       </a>
@@ -25,7 +25,8 @@
       <a class="nav-link text-muted" href="/" style="font-size: 24px;"><i class="fa fa-github" aria-hidden="true"></i></a>
     </nav>
 
-    <div class="progress" style="border-radius: 0px; height: 30px;">
+    <!-- Extract / Transform / Load Progress Indicator -->
+    <div class="progress" style="border-radius: 0px; height: 30px; font-weight: bold; font-size: 18px; font-variant: small-caps;">
       <div class="progress-bar" role="progressbar" style="width: 34%; background-color: #001f3f; color: hsla(210, 100%, 75%, 1.0);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Extract</div>
 
       <div class="progress-bar" role="progressbar" style="width: 34%; background-color: #0074D9; color: hsla(208, 100%, 85%, 1.0);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Transform</div>
@@ -33,6 +34,26 @@
       <div class="progress-bar bg-info" role="progressbar" style="width: 34%; background-color: #7FDBFF; color: hsla(197, 100%, 20%, 1.0);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Load</div>
     </div>
 
+    <!-- About Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">About</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>powerful travelog for gamers built in nodejs & postgresql</p>
+          </div>
+          <div class="modal-footer">
+            <a href="http://github.com/insanj/arches"><button type="button" class="btn btn-primary">View on Github <i class="fa fa-github" aria-hidden="true"></i></button></a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
