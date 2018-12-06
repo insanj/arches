@@ -20,9 +20,10 @@
   },
   "homepage": "https://github.com/insanj/arches#readme",
   "dependencies": {
-    "express": "latest"
+    "express": "latest",
+    "fs" : "latest"
   },
   "scripts": {
-    "start" : "node Arches.js"
+    "start" : "node server/Arches.js"
   }
 }
