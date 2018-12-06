@@ -1,7 +1,7 @@
 
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 8080
 var path = require('path');
 var fs = require('fs');
 
@@ -18,5 +18,5 @@ app.use('/static', express.static(path.join(__dirname + '/../webapp/static')))
 //});
 
 // DONE!
-app.set('trust proxy', true);
+// app.set('trust proxy', true);
 app.listen(port, () => console.log(`Arches on ${port}!`))

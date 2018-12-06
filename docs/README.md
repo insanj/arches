@@ -1,14 +1,20 @@
-<p align="center">
-  <h1 align="center">arches</h1>
-
-  <p align="center">
-    🐚 powerful travelog for gamers built in nodejs & postgresql
-  </p>
-</p>
+<a href="http://github.com/insanj/arches"><img src="https://img.shields.io/badge/github--black.svg?logo=github&style=plastic&logoColor=white" /></a>
 
 ## What's included
 
 ```
+.
+├── LICENSE
+├── Makefile
+├── app.yaml
+├── package.json
+├── docs
+├── server
+│   ├── Arches.js
+│   └── ArchesExtractor.js
+└── webapp
+    ├── index.html
+    └── static
 ```
 
 ## Creators
