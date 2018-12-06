@@ -15,3 +15,6 @@ local:
 .PHONY: ngrok
 ngrok:
 	./ngrok http $(TESTING_PORT) -subdomain arches
+
+gcloud:
+	gcloud app deploy

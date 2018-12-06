@@ -18,4 +18,5 @@ app.use('/static', express.static(path.join(__dirname + '/../webapp/static')))
 //});
 
 // DONE!
+app.set('trust proxy', true);
 app.listen(port, () => console.log(`Arches on ${port}!`))
