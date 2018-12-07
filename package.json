@@ -23,6 +23,7 @@
     "express": "latest",
     "body-parser": "latest",
     "pako": "latest",
-    "fs": "latest"
+    "fs": "latest",
+    "prismarine-nbt": "latest"
   }
 }

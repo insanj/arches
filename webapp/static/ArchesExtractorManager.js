@@ -19,7 +19,9 @@ class ArchesExtractorManager {
             arrayBuffer = this.result;
             try {
 	            let result = pako.ungzip(new Uint8Array(arrayBuffer), {"to": "string"});
-	            let resultJSON = {"data" : result};
+	            let binaryResult = pako.ungzip(new Uint8Array(arrayBuffer), {"to": "binary"}); //document.getElementById("arches-extractor").files[0].getAsBinary();
+
+	            let resultJSON = {"data" : result, "binary" : binaryResult};
 	            var resultJSONString = JSON.stringify(resultJSON);
 	            console.log("Sending " + resultJSONString);
 				$.ajax({
@@ -28,10 +30,10 @@ class ArchesExtractorManager {
 				   data: resultJSONString,
 				   contentType: "application/json",
 				   success: function(d) {
-				   	selfRef.completion(d);
+				   	selfRef.completion(file, d);
 				   },
 				   error: function(d, e) {
-				   	selfRef.completion(d);
+				   	selfRef.completion(file, d);
 				   }
 				});
             } catch (err) {
@@ -39,15 +41,5 @@ class ArchesExtractorManager {
             }
         };
         fileReader.readAsArrayBuffer(file);
-
-		// derived from https://stackoverflow.com/questions/7431365/filereader-readasbinarystring-to-upload-files
-		/*var xmlHttpRequest = new XMLHttpRequest();
-		xmlHttpRequest.addEventListener("load", function() {
-		   	selfRef.completion(this.responseText);
-		});
-		xmlHttpRequest.open("POST", '/extract', true);
-		xmlHttpRequest.setRequestHeader("Content-Type", file.type);
-		xmlHttpRequest.send(file);*/
-
 	}
 }

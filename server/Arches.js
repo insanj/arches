@@ -10,20 +10,33 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/../webapp/index.html'))
 })
 
-
-var savedStuff = [];
-
 // EXTRACT ENDPOINT
-app.use(bodyParser.urlencoded({ extended: false }));
+var extracted = [];
+app.use(bodyParser.urlencoded({ extended: false, limit: '500mb'}));
 app.use(bodyParser.json());
 app.post('/extract', function (req, res) {	
 	console.log(`Received: ${JSON.stringify(req.body)}`)
 	const resultString = req.body["data"];
-	savedStuff.push(resultString);
+	extracted.push(resultString);
 
-	const formattedResponse = "Arches JSON Format:\n------------" + "Minecraft NBT Format:\n------------" + savedStuff.toString();
-	res.end(formattedResponse)
-})
+	//var formattedResponse = "Minecraft NBT Format:\n------------" + extracted.toString();
+
+	const tmpFileLocation = 'save.nbt'
+	const binaryString = Object.values(req.body["binary"]);
+	console.log("Preparing to write binary = " + binaryString);
+	fs.writeFile(tmpFileLocation, binaryString, function(err) {
+		console.log("Wrote file! " + err);
+		fs.readFile(tmpFileLocation, function(error, data) {
+			console.log("Read file! " + error);
+			const nbt = require('prismarine-nbt');
+			nbt.parse(data, function(error, d) {
+				console.log("Parsed file! " + d);
+		        console.log(d.value);
+		    	res.end(d.value);
+		    });
+		});
+	});
+});
 
 // 404 AND STATIC FILES
 app.use('/static', express.static(path.join(__dirname + '/../webapp/static')))
