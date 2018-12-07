@@ -12,6 +12,8 @@ function arches_transform(jsonData) {
 	   contentType: "application/json",
 	   success: function(loadDataResponse) {
 			$("#" + transformDivID).hide();
+			$("#arches-load-progress").css({"color": "hsla(197, 100%, 20%, 1.0)"});
+
 			$("body").append("<div class='jumbotron' id='" + loadDivID + "'></div>");
 			$("#" + loadDivID).html("<h1 class='lead-1'>Load</h1><hr/>" + loadDataResponse);
 			console.log(loadDataResponse);
@@ -29,7 +31,7 @@ function arches_extract() {
 	var extractorManager = new ArchesExtractorManager(function(file, jsonResponseString) {
 		var jsonResponse = JSON.parse(jsonResponseString);
 		$("#" + dragAndDropDivID).hide();
-
+		$("#arches-transform-progress").css({"color": "hsla(208, 100%, 85%, 1.0)"});
 
 		$("body").append("<div class='jumbotron' id='" + transformDivID + "'></div>");
 		$("#" + transformDivID).append("<h1 class='lead-1'>Transform</h1><hr/>");
@@ -41,7 +43,7 @@ function arches_extract() {
 		$("#" + transformDivID).append("<textarea style='width: 100%; height: 500px;'>" + data + "</textarea>");
 
 		const transformButtonID = "arches-transform-begin";
-        $("#" + transformDivID).append("<button type='button' class='btn btn-primary' id='"+transformButtonID+"'><i class='fa fa-cog' aria-hidden='true'></i> Finish Transformation</button>");
+        $("#" + transformDivID).append("<button type='button' class='btn btn-primary' id='"+transformButtonID+"'><i class='fa fa-cog' aria-hidden='true'></i> Load</button>");
         var selfRef = this;
         $("#" + transformButtonID).on("click", function(e) {
         	arches_transform(jsonResponse["json"]);

@@ -1,9 +1,14 @@
 SHELL:=/bin/bash
-# .EXPORT_ALL_VARIABLES:
+
+.EXPORT_ALL_VARIABLES:
+SQL_USER:=postgres
+SQL_PASSWORD:=slide
+SQL_DATABASE:=arches
 
 TESTING_PORT=8080
 
-node:
+.PHONY: node
+postgres:
 	npm start
 
 install:
@@ -11,6 +16,10 @@ install:
 
 gcloud:
 	gcloud app deploy
+
+#.PHONY: postgresql
+#postgresql:
+#	gcloud sql databases create arches --instance=arches
 
 #TESTING RECIPES:
 # 

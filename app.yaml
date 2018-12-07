@@ -9,3 +9,11 @@ resources:
   memory_gb: 0.5
   disk_size_gb: 10
 
+env_variables:
+  SQL_USER: postgres
+  SQL_PASSWORD: slide
+  SQL_DATABASE: arches
+  INSTANCE_CONNECTION_NAME: arches-224720:us-east1:arches
+
+beta_settings:
+  cloud_sql_instances: arches-224720:us-east1:arches

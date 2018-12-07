@@ -40,6 +40,7 @@ app.post('/extract', function (req, res) {
    	});
 });
 
+app.enable('trust proxy');
 app.post('/transform', function (req, res) {	
 	const ArchesLoader = require('./ArchesLoader.js')
 	var loader = new ArchesLoader(databaseFilename);

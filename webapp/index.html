@@ -29,9 +29,9 @@
     <div class="progress" data-toggle="modal" data-target="#about-modal" style="cursor:pointer; border-radius: 0px; height: 30px; font-weight: bold; font-size: 18px; font-variant: small-caps;">
       <div class="progress-bar" role="progressbar" style="width: 34%; background-color: #001f3f; color: hsla(210, 100%, 75%, 1.0);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Extract</div>
 
-      <div class="progress-bar" role="progressbar" style="opacity: 0.5; width: 34%; background-color: #0074D9; color: hsla(208, 100%, 85%, 1.0);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Transform</div>
+      <div id="arches-transform-progress" class="progress-bar" role="progressbar" style="width: 34%; background-color: #0074D9; color: hsla(208, 100%, 85%, 0.05);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Transform</div>
 
-      <div class="progress-bar bg-info" role="progressbar" style="opacity: 0.5; width: 34%; background-color: #7FDBFF; color: hsla(197, 100%, 20%, 1.0);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Load</div>
+      <div id="arches-load-progress" class="progress-bar bg-info" role="progressbar" style="width: 34%; background-color: #7FDBFF; color: hsla(197, 100%, 20%, 0.05);" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Load</div>
     </div>
 
     <!-- About Modal -->
@@ -44,31 +44,32 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-close" aria-hidden="true"></i></button>
           </div>
           <div class="modal-body">
-            <p>🐚 Arches is a powerful webapp that scrapes and aggregates your Minecraft save data, allowing you to pool your player, inventory, and location information into new data structures. All features are accessible using the REST API which powers this webapp. The three core components of Arches are:
+            <p>🐚 Arches is a powerful webapp that scrapes and aggregates your Minecraft data, allowing you to pool your saves into new data structures.</p>
+
+            <p>The three core components of Arches are:</p>
 
             <ol>
               <li>
                 <b>Extract</b>
-                <p>Drag and drop your Minecraft save data from <code>~/Library/Application Support/minecraft</code> or <code>%AppData%\.minecraft</code>. Arches will parse and extract player, inventory, and location data from the save file (accessible using its NodeJS API).</p>
+                <p>Drag and drop your Minecraft save data from <code>~/Library/Application Support/minecraft</code> or <code>%AppData%\.minecraft</code>. Arches will parse and extract the NBT data from the save file using its REST API.</p>
               </li>
               <li>
                 <b>Transform</b>
-                <p>Arches translates the extracted Minecraft save data into Arches NodeJS classes which can be represented visually in the Arches webapp. These items can also be exported in their own JSON format instead of the original Minecraft save format from the first step.</p>
+                <p>Arches translates the extracted Minecraft save data into Arches JSON which can be represented visually in the Arches webapp. These items can also be exported in their own JSON format instead of the original Minecraft save format from the first step.</p>
               </li>
               <li>
                 <b>Load</b>
-                <p>A PostgreSQL database is loaded from the Arches NodeJS objects which are efficiently fit into relational models. The resulting database is stored in the location of the NodeJS server and will be updated every time a new save file is used in the Extract step.</p>
+                <p>A PostgreSQL database is loaded from the Arches JSON which are efficiently fit into relational models. The resulting database is stored in the location of the NodeJS server and will be updated every time a new save file is used in the Extract step.</p>
 
-                <p>Once new records are created, the database view can be filtered and sorted using PostgreSQL. All webapp features are also easy to use without a UI using the REST API directly.</p> 
+                <p>Once new records are created, the database view will be updated with all new rows. These webapp features are wired using POST requests to the NodeJS Express server.</p> 
 
-                <p>All together, this allows for the tracking of <i>journies</i> - representations of change in player, location, and inventory location over time (and how each may relate to each other).</p>
+                <p>All together, this theoretically allows for the tracking of <i>journies</i> - representations of change in player, location, and inventory location over time (and how each may relate to each other).</p>
               </li>
             </ol>
 
             <p class="text-muted" style="margin-top: 40px; text-align: center; opacity: 0.5; font-size: 13px;">
               Made in NYC <i class="fa fa-heart" aria-hidden="true"></i><br/>
               <a class="text-muted" href="https://github.com/insanj">&copy; 2018 Julian (insanj) Weiss</a>
-            </p>
             </p>
           </div>
         </div>

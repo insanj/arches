@@ -83,12 +83,14 @@ class ArchesLoader {
 	loadJSONIntoPostgreSQL(jsonToSave, loadJSONCompletion) {
 		var pgp = require('pg-promise')(/*options*/)
 
-		var databaseUsername = 'postgres';
-		var databasePassword = 'slide';
-		var databaseHost = 'localhost';
+		var databaseUsername = process.env.SQL_USER;
+		var databasePassword = process.env.SQL_PASSWORD;
+		var databaseHost = process.env.INSTANCE_CONNECTION_NAME ? '/cloudsql/' + process.env.INSTANCE_CONNECTION_NAME : "localhost";
 		var databasePort = '5432';
-		var databaseName = 'arches'
-		var db = pgp('postgres://'+databaseUsername+':'+databasePassword+'@'+databaseHost+':'+databasePort+'/'+databaseName)
+		var databaseName = process.env.SQL_DATABASE;
+		var databaseConnectString = 'postgres://'+databaseUsername+':'+databasePassword+'@'+databaseHost+':'+databasePort+'/'+databaseName;
+		console.log("CONNECT STRING = " + databaseConnectString);
+		var db = pgp(databaseConnectString)
 		var selfRef = this;
 
 		var inventoryItems = jsonToSave["inventory"];
