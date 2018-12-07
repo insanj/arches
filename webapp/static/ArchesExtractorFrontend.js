@@ -9,11 +9,11 @@ class ArchesExtractorFrontend {
 		this.extractorManager = extractorManager;
 	}
 
-	handleFinishedReadingTextFromFileUI(file, fr, result) {
+	handleFinishedReadingTextFromFileUI(file, fr, markup) {
         $(this.parentDivSelector).append("<button type='button' class='btn btn-primary' id='"+arches_extractButtonID+"'><i class='fa fa-cog' aria-hidden='true'></i> Begin Transformation</button>");
         var selfRef = this;
         $("#" + arches_extractButtonID).on("click", function(e) {
-        	selfRef.extractorManager.handleExtractionFile(file, fr, result);
+        	selfRef.extractorManager.handleExtractionFile(file, fr, markup);
         });
 	}
 

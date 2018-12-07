@@ -5,7 +5,7 @@ class ArchesExtractorManager {
 		this.completion = completion;
 	}
 
-	handleExtractionFile(file, fr, result) {
+	handleExtractionFile(file, fr, markup) {
 		var selfRef = this;
 		var extractURL = window.location.href;
 		if (extractURL.charAt(extractURL.length-1) != "/") {
@@ -19,11 +19,9 @@ class ArchesExtractorManager {
             arrayBuffer = this.result;
             try {
 	            let result = pako.ungzip(new Uint8Array(arrayBuffer), {"to": "string"});
-	            let binaryResult = pako.ungzip(new Uint8Array(arrayBuffer), {"to": "binary"}); //document.getElementById("arches-extractor").files[0].getAsBinary();
-
-	            let resultJSON = {"data" : result, "binary" : binaryResult};
+	            let resultJSON = {"data" : result, "markup" : markup};
 	            var resultJSONString = JSON.stringify(resultJSON);
-	            console.log("Sending " + resultJSONString);
+	            console.log("Sending data " + resultJSONString);
 				$.ajax({
 				   url: extractURL,
 				   type: 'POST',

@@ -13,30 +13,53 @@ app.get('/', function (req, res) {
 // EXTRACT ENDPOINT
 var extracted = [];
 app.use(bodyParser.urlencoded({ extended: false, limit: '500mb'}));
-app.use(bodyParser.json());
+app.use(function(req,res,next){
+	if(req.url.includes("extract") == true) {
+		return bodyParser.json();
+	} else {
+		next()
+	}
+});
+
 app.post('/extract', function (req, res) {	
 	console.log(`Received: ${JSON.stringify(req.body)}`)
 	const resultString = req.body["data"];
 	extracted.push(resultString);
 
-	//var formattedResponse = "Minecraft NBT Format:\n------------" + extracted.toString();
+	const markupData = req.body["markup"];
 
-	const tmpFileLocation = 'save.nbt'
-	const binaryString = Object.values(req.body["binary"]);
-	console.log("Preparing to write binary = " + binaryString);
-	fs.writeFile(tmpFileLocation, binaryString, function(err) {
-		console.log("Wrote file! " + err);
-		fs.readFile(tmpFileLocation, function(error, data) {
-			console.log("Read file! " + error);
-			const nbt = require('prismarine-nbt');
-			nbt.parse(data, function(error, d) {
-				console.log("Parsed file! " + d);
-		        console.log(d.value);
-		    	res.end(d.value);
-		    });
-		});
-	});
+	var formattedResponse = "Binary NBT Format:\n------------" + markupData + "Minecraft NBT Format:\n------------" + resultString;
+	res.end(formattedResponse);
 });
+
+/*
+app.post("/transform", function (req, res) {
+	console.log("Got something!");
+
+	var body = '';
+    filePath = __dirname + '/transform.dat';
+    req.on('data', function(data) {
+		console.log("Streaming data!");
+        body += data;
+    });
+
+    req.on('end', function (e) {
+		console.log("End of data! " + e);
+        fs.writeFile(filePath, body, function(er) {
+			console.log("Wrote file! " + er);
+			fs.readFile(filePath, function(error, data) {
+				console.log("Read file! " + error);
+				const nbt = require('prismarine-nbt');
+				nbt.parse(data, function(error, d) {
+					console.log("Parsed file! " + d);
+			        console.log(d.value);
+			    	res.end(d.value);
+			    });
+			});
+        });
+    });
+});
+*/
 
 // 404 AND STATIC FILES
 app.use('/static', express.static(path.join(__dirname + '/../webapp/static')))
