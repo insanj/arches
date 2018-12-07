@@ -9,6 +9,9 @@
   "scripts": {
     "start": "node server/Arches.js"
   },
+  "engines": {
+    "node": ">=8"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/insanj/arches.git"
