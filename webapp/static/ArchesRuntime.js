@@ -6,7 +6,12 @@ requirejs(['static/ArchesExtractorManager', 'static/ArchesExtractorFrontend'], f
 
 	var extractorManager = new ArchesExtractorManager(function(data) {
 		// transition to transform step
-		console.log(data);
+		$("#" + dragAndDropDivID).hide();
+
+		const transformDivID = "arches-transform";
+		$("body").append("<div class='jumbotron' id='" + transformDivID + "'></div>");
+		$("#" + transformDivID).append("<h1 class='lead-1'>Transform</h1><hr/>");
+		$("#" + transformDivID).append("<textarea style='width: 100%; height: 500px;'>" + data + "</textarea>");
 	});
 	
 	var extractor = new ArchesExtractorFrontend("#" + dragAndDropDivID, extractorManager);

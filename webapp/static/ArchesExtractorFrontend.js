@@ -10,7 +10,7 @@ class ArchesExtractorFrontend {
 	}
 
 	handleFinishedReadingTextFromFileUI(file, fr, result) {
-        $(this.parentDivSelector).append("<button type='button' class='btn btn-primary' id='"+arches_extractButtonID+"'><i class='fa fa-tint' aria-hidden='true'></i> Finish Extraction</button>");
+        $(this.parentDivSelector).append("<button type='button' class='btn btn-primary' id='"+arches_extractButtonID+"'><i class='fa fa-cog' aria-hidden='true'></i> Begin Transformation</button>");
         var selfRef = this;
         $("#" + arches_extractButtonID).on("click", function(e) {
         	selfRef.extractorManager.handleExtractionFile(file, fr, result);
@@ -81,6 +81,7 @@ class ArchesExtractorFrontend {
 
 		var selfRep = this;
 		$("#" + arches_extractorDivID).change(function(e) {
+			$("#" + arches_extractorDivID).hide();
 			if (e != null && e.target != null && e.target.files != null && e.target.files.length > 0) {
 				selfRep.handleInputFileUploadedFromUI(e.target.files[0]);
 			} else {
