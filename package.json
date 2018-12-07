@@ -25,6 +25,6 @@
     "pako": "latest",
     "fs": "latest",
     "prismarine-nbt": "latest",
-    "pg": "latest"
+    "pg-promise": "latest"
   }
 }

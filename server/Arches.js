@@ -50,12 +50,8 @@ app.post('/transform', function (req, res) {
 	const ArchesLoader = require('./ArchesLoader.js')
 	var loader = new ArchesLoader(databaseFilename);
 
-	loader.saveJSON(req.body, function (status) {
-		res.end(status);
-		/*console.log("2");
-		loader.renderDatabase(function (d) {
-			console.log("3");
-		});*/
+	loader.loadJSONIntoPostgreSQL(req.body, function (loaderResponse) {
+		res.end(loaderResponse);
 	});
 });
 

@@ -1,5 +1,17 @@
 <a href="http://github.com/insanj/arches"><img src="https://img.shields.io/badge/github--black.svg?logo=github&style=plastic&logoColor=white" /></a>
 
+## How to use
+
+1. Local deploy with `make`
+2. Gcloud with `make gcloud`
+
+Configure PostgreSQL and open Admin at http://127.0.0.1:59126/browser/#.
+
+1. Create server, database, arches table
+2. Fill in by running ETL process completely in webapp
+
+Open up webapp locally using http://localhost:8080/.
+
 ## What's included
 
 ```

@@ -31,7 +31,7 @@ class ArchesTransformer {
 					"id" : inventoryItem["id"]["value"].replace("minecraft:", ""),
 					"slot" : inventoryItem["Slot"]["value"],
 					"count" : inventoryItem["Count"]["value"],
-					"damage" : inventoryItem["Damage"]["value"]
+					"damage" : inventoryItem["Damage"] ? inventoryItem["Damage"]["value"] : "unknown"
 				}
 
 				transformedItems.push(itemJSON)

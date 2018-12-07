@@ -10,12 +10,12 @@ function arches_transform(jsonData) {
 	   type: 'POST',
 	   data: jsonData,
 	   contentType: "application/json",
-	   success: function(d) {
-			// $("#" + transformDivID).hide();
+	   success: function(loadDataResponse) {
+			$("#" + transformDivID).hide();
 			$("body").append("<div class='jumbotron' id='" + loadDivID + "'></div>");
 			$("#" + loadDivID).append("<h1 class='lead-1'>Load</h1><hr/>");
-			$("#" + loadDivID).append("<p>" + d + "</p>");
-			console.log(d);
+			$("#" + loadDivID).append(loadDataResponse);
+			console.log(loadDataResponse);
 	   },
 	   error: function(d, e) {
 	   	console.log(e);
