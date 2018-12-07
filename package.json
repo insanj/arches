@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/insanj/arches#readme",
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "latest",
+    "body-parser": "latest",
+    "pako": "latest",
     "fs": "latest"
   }
 }
