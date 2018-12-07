@@ -13,8 +13,7 @@ function arches_transform(jsonData) {
 	   success: function(loadDataResponse) {
 			$("#" + transformDivID).hide();
 			$("body").append("<div class='jumbotron' id='" + loadDivID + "'></div>");
-			$("#" + loadDivID).append("<h1 class='lead-1'>Load</h1><hr/>");
-			$("#" + loadDivID).append(loadDataResponse);
+			$("#" + loadDivID).html("<h1 class='lead-1'>Load</h1><hr/>" + loadDataResponse);
 			console.log(loadDataResponse);
 	   },
 	   error: function(d, e) {

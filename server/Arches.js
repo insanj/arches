@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: false, limit: '500mb'}));
 app.use(bodyParser.json());
 
 app.post('/extract', function (req, res) {	
-	console.log(`Received: ${JSON.stringify(req.body)}`)
 	const resultString = req.body["data"];
 	extracted.push(resultString);
 
@@ -27,14 +26,9 @@ app.post('/extract', function (req, res) {
 
 	const filePath = "player.dat";
 	fs.writeFile(filePath, markupData, function(er) {
-		console.log("Wrote file! " + er);
 		fs.readFile(filePath, function(error, data) {
-			console.log("Read file! " + error);
 			const nbt = require('prismarine-nbt');
-			nbt.parse(data, function(error, d) {
-				console.log("Parsed file! " + d);
-		        console.log(d.value);
-		        
+			nbt.parse(data, function(error, d) {		        
 		        const ArchesTransformer = require('./ArchesTransformer.js')
 		        var transformer = new ArchesTransformer(d);
 		        var transformerRendering = transformer.render();
@@ -61,4 +55,4 @@ app.use('/static', express.static(path.join(__dirname + '/../webapp/static')))
 // DONE!
 // app.set('trust proxy', true);
 const port = 8080
-app.listen(port, () => console.log(`Arches on ${port}!`))
+app.listen(port, () => console.log(`🐚 Arches on ${port}!`))

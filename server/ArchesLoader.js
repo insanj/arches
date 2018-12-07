@@ -1,4 +1,4 @@
-const randomColors = ["0074D9","7FDBFF","39CCCC","3D9970","2ECC40","01FF70","FFDC00","FF851B","FF4136","85144b","F012BE","B10DC9"];
+const randomColors = ["0074D9","7FDBFF","39CCCC","3D9970","2ECC40","FFDC00","FF851B","FF4136","85144b","F012BE","B10DC9"];
 
 class ArchesLoader {
 	constructor(databaseFilename) {
@@ -10,43 +10,38 @@ class ArchesLoader {
 		var buildTree = function(t) {
 		    return t.map('SELECT * FROM payloads', [], p => {
 		    	var payloadId = p["id"];
-		    	// console.log("Selecting items from payload = " + JSON.stringify(p) + " with payload_id = "+ payloadId);
 
 		    	buildTreePayloads[payloadId] = {"payload":p, "items":[]};
-		        return t.any('SELECT * FROM items') // WHERE payload_id = ${payloadId}'
+		        return t.any('SELECT * FROM items')
 	            .then(i => {
 	            	buildTreePayloads[payloadId]["items"] = buildTreePayloads[payloadId]["items"].concat([i]);
-			    	// console.log("Found items = " + JSON.stringify(i));
 	                return i;
 	            });
-		    }).then(t.batch); // settles the array of generated promises
+		    }).then(t.batch);
 		}
 
 		var finishPostgreSQLSelect = function (dataArray) {
-			// console.log("Got data " + JSON.stringify(dataArray));
 	    	var resultString = "PostgreSQL Database Contents";
 	    	for (var i in dataArray) {
 	    		var dict = dataArray[i];
-	    		var dataValue = JSON.stringify(dict, null, '\t');
+	    		// dict["items"] = JSON.stringify(dict["items"], null, 4)
+	    		var dataValue = JSON.stringify(dict, null, 4)
 	    		// var cleanedValue = dataValue.replace("_", " ").toUpperCase();
 	    		var randomColorIdx = Math.floor(Math.random() * randomColors.length);
     		    var randomColor = randomColors[randomColorIdx];
-	    		resultString += '<div class="card text-center text-white" style="background-color: #'+randomColor+';"><div class="card-body">' + dataValue + "</div></div>";
+	    		resultString += '<div class="card text-center text-white" style="background-color: #'+randomColor+';"><div class="card-body text-left"><textarea style="width: 100%; height: 500px;">' + dataValue + "</textarea></div></div>";
 	    	}
 
 	    	return resultString;
 		}
 
-		// console.log("Getting all from inventories database!");
 		db.task(buildTree)
 	    .then(function(data) {
-	    	// console.log("Got inventory data = " + JSON.stringify(data));
 	    	var resultString = finishPostgreSQLSelect(buildTreePayloads);
-	    	// console.log("Finished up with " + resultString);
 		  	selectSQLCompletion(resultString);
 	    })
 	    .catch(function(error) {
-	    	// console.log("Failed to get stuff :( " + error);
+	    	console.log("Failed to get stuff :( " + error);
 		  	selectSQLCompletion(JSON.stringify(error));
 	    });
 	}
@@ -56,14 +51,11 @@ class ArchesLoader {
 		db.any('INSERT INTO payloads(e) VALUES ($1) RETURNING *', "v1.0")
 		.then(data => {
 			var payloadId = data[0]["id"];
-			// console.log("Inserted payload with result = " + JSON.stringify(data) + " and id = " + payloadId);
-			// console.log("addAllItemsFromJSONIntoPostgreSQL inserted new payload with id = " + payloadId + " from data = " + JSON.stringify(data));
 		  	var selfRef = this;
 			db.tx(t => {
 				const queries = inventoryItems.map(item => {
 					var itemIdentifier = item["id"];
 					var jsonBlob = JSON.stringify(item);
-					// console.log("Inserting item with id " + itemIdentifier + " into payload_id " + payloadId);
 				    return t.none('INSERT INTO items(payload_id, name, jsonBlob) VALUES(${payloadId}, ${itemIdentifier}, ${jsonBlob})', {
 				    	"payloadId":payloadId, 
 				    	"itemIdentifier":itemIdentifier,
@@ -104,7 +96,6 @@ class ArchesLoader {
 			return t.batch(queries);
 		})
 	    .then(data => {
-	    	console.log("Created table");
 		  	selfRef.addAllItemsFromJSONIntoPostgreSQL(inventoryItems, db, loadJSONCompletion);
 		})
 		.catch(error => {
