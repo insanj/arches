@@ -12,7 +12,9 @@ class ArchesLoader {
 		    	var payloadId = p["id"];
 
 		    	buildTreePayloads[payloadId] = {"payload":p, "items":[]};
-		        return t.any('SELECT * FROM items')
+		        return t.any('SELECT * FROM items WHERE payload_id LIKE ${payloadId}', {
+		        	"payloadId":String(payloadId)
+		        })
 	            .then(i => {
 	            	buildTreePayloads[payloadId]["items"] = buildTreePayloads[payloadId]["items"].concat([i]);
 	                return i;
@@ -92,7 +94,7 @@ class ArchesLoader {
 		var inventoryItems = jsonToSave["inventory"];
 
 		db.tx(t => {
-			const queries = [t.none("CREATE TABLE IF NOT EXISTS payloads (e VARCHAR(20), created TIMESTAMP, id SERIAL PRIMARY KEY)"), t.none("CREATE TABLE IF NOT EXISTS items (payload_id VARCHAR(200), name TEXT, jsonBlob TEXT)"), t.none('ALTER TABLE payloads ALTER COLUMN created SET DEFAULT now()')];
+			const queries = [t.none("CREATE TABLE IF NOT EXISTS payloads (e VARCHAR(20), created TIMESTAMP, id SERIAL PRIMARY KEY)"), t.none("CREATE TABLE IF NOT EXISTS items (payload_id TEXT, name TEXT, jsonBlob TEXT)"), t.none('ALTER TABLE payloads ALTER COLUMN created SET DEFAULT now()')];
 			return t.batch(queries);
 		})
 	    .then(data => {
