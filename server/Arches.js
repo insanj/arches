@@ -22,8 +22,7 @@ app.post('/extract', function (req, res) {
 
 	const markupData = Buffer.from(req.body["markup"], 'base64')
 
-	var formattedResponse = "Binary NBT Format:\n------------\n" + markupData + "\nMinecraft NBT Format:\n------------\n" + resultString;
-	res.end(markupData);
+	var formattedResponse = "\n\nBinary NBT Format:\n------------\n\n" + markupData + "\n\nMinecraft NBT Format:\n------------\n\n" + resultString;
 
 	const filePath = "player.dat";
 	fs.writeFile(filePath, markupData, function(er) {
@@ -34,6 +33,14 @@ app.post('/extract', function (req, res) {
 			nbt.parse(data, function(error, d) {
 				console.log("Parsed file! " + d);
 		        console.log(d.value);
+		        
+		        const ArchesTransformer = require('./ArchesTransformer.js')
+		        var transformer = new ArchesTransformer(d);
+		        var transformerRendering = transformer.render();
+
+		        var responseString = "Arches Transformed JSON:\n------------\n\n" + transformerRendering;
+		        responseString += formattedResponse;
+	        	res.end(responseString);
 		    });
 		});
    	});

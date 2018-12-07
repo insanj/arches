@@ -1,6 +1,10 @@
 const arches_extractorDivID = "arches-extractor";
 const arches_extractButtonID = "arches-extractor-done-button";
 
+// Goal:
+// - Show UI to upload Minecraft save data file
+// - Upload save data file and convert from binary
+// - Hand off data to ArchesTransformer when user is ready
 class ArchesExtractorFrontend {
 	constructor(parentDivSelector, extractorManager, saveDataFile=null) {
 		this.parentDivSelector = parentDivSelector;
