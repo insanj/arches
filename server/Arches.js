@@ -9,16 +9,12 @@ app.get('/', function (req, res) {
 })
 
 // EXTRACT ENDPOINT TO UPLOAD GZIP FILE
-const bodyParser = require("body-parser");
-const pako = require('pako');
-app.use(bodyParser.text({inflate: true}));
+const fileupload = require("express-fileupload");
+app.use(fileupload());
 app.post('/extract', function (req, res) {
-	var stringRep = req.body.toString();
-	// console.log(`Received: ${req.body}`)
-	console.log('String = ' + stringRep);
-	let buff = new Buffer(data, 'base64');  
-
-// console.log(`Inflated to: ${pako.inflateRaw(req.body)}`)
+	//let buff = Buffer.from(, 'base64');  
+	//let buffString = buff.toString("utf8");
+	console.log("uploaded!!" + req.files);
 	res.send('ok')
 })
 

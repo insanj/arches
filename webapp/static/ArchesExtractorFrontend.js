@@ -9,11 +9,11 @@ class ArchesExtractorFrontend {
 		this.extractorManager = extractorManager;
 	}
 
-	handleFinishedReadingTextFromFileUI(fr, result) {
+	handleFinishedReadingTextFromFileUI(file, fr, result) {
         $(this.parentDivSelector).append("<button type='button' class='btn btn-primary' id='"+arches_extractButtonID+"'><i class='fa fa-tint' aria-hidden='true'></i> Finish Extraction</button>");
         var selfRef = this;
         $("#" + arches_extractButtonID).on("click", function(e) {
-        	selfRef.extractorManager.handleExtractionFile(fr, result);
+        	selfRef.extractorManager.handleExtractionFile(file, fr, result);
         });
 	}
 
@@ -26,7 +26,7 @@ class ArchesExtractorFrontend {
     }
 
     // Algorithm partially derived from https://stackoverflow.com/questions/3146483/html5-file-api-read-as-text-and-binary
-	renderResultFromFileUI(label, fr, completion=null) {
+	renderResultFromFileUI(userUploadedFile, label, fr, completion=null) {
         var markup, result, n, aByte, byteStr;
 
         markup = [];
@@ -45,7 +45,7 @@ class ArchesExtractorFrontend {
         this.renderBinaryDiv("pre", markup.join(" "));
 
         if (completion != null) {
-	        completion(fr, markup);
+	        completion(userUploadedFile, fr, markup);
        	}
 	}
 
@@ -53,8 +53,8 @@ class ArchesExtractorFrontend {
 		const reader = new FileReader();
 		var selfRep = this;
 		reader.onload = function(e) {
-			selfRep.renderResultFromFileUI("Binary", reader, function(fr, markup) {
-				selfRep.handleFinishedReadingTextFromFileUI(fr, markup);
+			selfRep.renderResultFromFileUI(userUploadedFile, "Binary", reader, function(file, fr, markup) {
+				selfRep.handleFinishedReadingTextFromFileUI(file, fr, markup);
 			});
 		};
 
@@ -67,7 +67,7 @@ class ArchesExtractorFrontend {
 		const reader = new FileReader();
 		var selfRep = this;
 		reader.onload = function(e) {
-			selfRep.renderResultFromFileUI("Text", reader);
+			selfRep.renderResultFromFileUI(userUploadedFile, "Text", reader);
 			selfRep.handleReadTextFromFileUI(userUploadedFile);
 		};
 

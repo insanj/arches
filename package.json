@@ -21,7 +21,7 @@
   "homepage": "https://github.com/insanj/arches#readme",
   "dependencies": {
     "express": "latest",
-    "body-parser": "latest",
+    "express-fileupload": "latest",
     "pako": "latest",
     "fs": "latest"
   }
