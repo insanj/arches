@@ -29,6 +29,25 @@ class ArchesLoader {
 	    });
 	}
 
+	addAllItemsFromJSONIntoPostgreSQL(inventoryItems, db, addAllItemsCompletion) {
+		var selfRef = this;
+		db.tx(t => {
+			const queries = inventoryItems.map(item => {
+				console.log(item);
+				var itemIdentifier = item["id"];
+				console.log(itemIdentifier);
+			    return t.none('INSERT INTO inventories(name) VALUES($1)', itemIdentifier);
+			});
+			return t.batch(queries);
+		})
+		.then(data => {
+		  	selfRef.selectAllFromPostgreSQL(db, addAllItemsCompletion);
+		})
+		.catch(error => {
+		  	selfRef.selectAllFromPostgreSQL(db, addAllItemsCompletion);
+		})
+	}
+
 	loadJSONIntoPostgreSQL(jsonToSave, loadJSONCompletion) {
 		var pgp = require('pg-promise')(/*options*/)
 
@@ -43,21 +62,14 @@ class ArchesLoader {
 		var inventoryItems = jsonToSave["inventory"];
 		console.log(inventoryItems);
 
-	    db.none("CREATE TABLE inventories (name varchar(255) NOT NULL CHECK (name <> '')");
-		db.tx(t => {
-			const queries = inventoryItems.map(item => {
-				console.log(item);
-				var itemIdentifier = item["id"];
-				console.log(itemIdentifier);
-			    return t.none('INSERT INTO inventories(name) VALUES($1)', itemIdentifier);
-			});
-			return t.batch(queries);
-		})
-		.then(data => {
-		  	selfRef.selectAllFromPostgreSQL(db, loadJSONCompletion);
+	    db.none("CREATE TABLE IF NOT EXISTS inventories (name TEXT)")
+	    .then(data => {
+	    	console.log("Created table");
+		  	selfRef.addAllItemsFromJSONIntoPostgreSQL(inventoryItems, db, loadJSONCompletion);
 		})
 		.catch(error => {
-		  	selfRef.selectAllFromPostgreSQL(db, loadJSONCompletion);
+	    	console.log("Failed to create table " + error);
+		  	selfRef.addAllItemsFromJSONIntoPostgreSQL(inventoryItems, db, loadJSONCompletion);
 		})
 	}
 }
