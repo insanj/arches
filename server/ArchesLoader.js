@@ -6,46 +6,84 @@ class ArchesLoader {
 	}
 
 	selectAllFromPostgreSQL(db, selectSQLCompletion) {
-		console.log("Getting all from inventories database!");
-		db.any('SELECT * FROM inventories')
-	    .then(function(dataArray) {
-	    	console.log("Got data " + JSON.stringify(dataArray));
+		var buildTreePayloads = {};
+		var buildTree = function(t) {
+		    return t.map('SELECT * FROM payloads', [], p => {
+		    	var payloadId = p["id"];
+		    	// console.log("Selecting items from payload = " + JSON.stringify(p) + " with payload_id = "+ payloadId);
+
+		    	buildTreePayloads[payloadId] = {"payload":p, "items":[]};
+		        return t.any('SELECT * FROM items') // WHERE payload_id = ${payloadId}'
+	            .then(i => {
+	            	buildTreePayloads[payloadId]["items"] = buildTreePayloads[payloadId]["items"].concat([i]);
+			    	// console.log("Found items = " + JSON.stringify(i));
+	                return i;
+	            });
+		    }).then(t.batch); // settles the array of generated promises
+		}
+
+		var finishPostgreSQLSelect = function (dataArray) {
+			// console.log("Got data " + JSON.stringify(dataArray));
 	    	var resultString = "PostgreSQL Database Contents";
 	    	for (var i in dataArray) {
 	    		var dict = dataArray[i];
-	    		var dataValue = dict["name"];
-	    		var cleanedValue = dataValue.replace("_", " ").toUpperCase();
+	    		var dataValue = JSON.stringify(dict, null, '\t');
+	    		// var cleanedValue = dataValue.replace("_", " ").toUpperCase();
 	    		var randomColorIdx = Math.floor(Math.random() * randomColors.length);
     		    var randomColor = randomColors[randomColorIdx];
-	    		resultString += '<div class="card text-center text-white" style="background-color: #'+randomColor+';"><div class="card-body">' + cleanedValue + "</div></div>";
+	    		resultString += '<div class="card text-center text-white" style="background-color: #'+randomColor+';"><div class="card-body">' + dataValue + "</div></div>";
 	    	}
 
-	    	console.log("Finished up with " + resultString);
+	    	return resultString;
+		}
+
+		// console.log("Getting all from inventories database!");
+		db.task(buildTree)
+	    .then(function(data) {
+	    	// console.log("Got inventory data = " + JSON.stringify(data));
+	    	var resultString = finishPostgreSQLSelect(buildTreePayloads);
+	    	// console.log("Finished up with " + resultString);
 		  	selectSQLCompletion(resultString);
 	    })
 	    .catch(function(error) {
-	    	console.log("Failed to get stuff :( " + error);
+	    	// console.log("Failed to get stuff :( " + error);
 		  	selectSQLCompletion(JSON.stringify(error));
 	    });
 	}
 
 	addAllItemsFromJSONIntoPostgreSQL(inventoryItems, db, addAllItemsCompletion) {
 		var selfRef = this;
-		db.tx(t => {
-			const queries = inventoryItems.map(item => {
-				console.log(item);
-				var itemIdentifier = item["id"];
-				console.log(itemIdentifier);
-			    return t.none('INSERT INTO inventories(name) VALUES($1)', itemIdentifier);
-			});
-			return t.batch(queries);
-		})
+		db.any('INSERT INTO payloads(e) VALUES ($1) RETURNING *', "v1.0")
 		.then(data => {
-		  	selfRef.selectAllFromPostgreSQL(db, addAllItemsCompletion);
+			var payloadId = data[0]["id"];
+			// console.log("Inserted payload with result = " + JSON.stringify(data) + " and id = " + payloadId);
+			// console.log("addAllItemsFromJSONIntoPostgreSQL inserted new payload with id = " + payloadId + " from data = " + JSON.stringify(data));
+		  	var selfRef = this;
+			db.tx(t => {
+				const queries = inventoryItems.map(item => {
+					var itemIdentifier = item["id"];
+					var jsonBlob = JSON.stringify(item);
+					// console.log("Inserting item with id " + itemIdentifier + " into payload_id " + payloadId);
+				    return t.none('INSERT INTO items(payload_id, name, jsonBlob) VALUES(${payloadId}, ${itemIdentifier}, ${jsonBlob})', {
+				    	"payloadId":payloadId, 
+				    	"itemIdentifier":itemIdentifier,
+				    	"jsonBlob":jsonBlob
+				    });
+				});
+				return t.batch(queries);
+			})
+			.then(data => {
+			  	selfRef.selectAllFromPostgreSQL(db, addAllItemsCompletion);
+			})
+			.catch(error => {
+				console.log("INSERT ITEM ERR addAllItemsFromJSONIntoPostgreSQL error = " + JSON.stringify(error))
+			  	selfRef.selectAllFromPostgreSQL(db, addAllItemsCompletion);
+			})
 		})
 		.catch(error => {
+			console.log("INSERT PAYLOAD ERR addAllItemsFromJSONIntoPostgreSQL error = " + JSON.stringify(error))
 		  	selfRef.selectAllFromPostgreSQL(db, addAllItemsCompletion);
-		})
+		})		
 	}
 
 	loadJSONIntoPostgreSQL(jsonToSave, loadJSONCompletion) {
@@ -60,9 +98,11 @@ class ArchesLoader {
 		var selfRef = this;
 
 		var inventoryItems = jsonToSave["inventory"];
-		console.log(inventoryItems);
 
-	    db.none("CREATE TABLE IF NOT EXISTS inventories (name TEXT)")
+		db.tx(t => {
+			const queries = [t.none("CREATE TABLE IF NOT EXISTS payloads (e VARCHAR(20), created TIMESTAMP, id SERIAL PRIMARY KEY)"), t.none("CREATE TABLE IF NOT EXISTS items (payload_id VARCHAR(200), name TEXT, jsonBlob TEXT)"), t.none('ALTER TABLE payloads ALTER COLUMN created SET DEFAULT now()')];
+			return t.batch(queries);
+		})
 	    .then(data => {
 	    	console.log("Created table");
 		  	selfRef.addAllItemsFromJSONIntoPostgreSQL(inventoryItems, db, loadJSONCompletion);
