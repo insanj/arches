@@ -45,7 +45,7 @@ class ArchesExtractorFrontend {
         this.renderBinaryDiv("pre", markup.join(" "));
 
         if (completion != null) {
-	        completion(userUploadedFile, fr, markup);
+	        completion(userUploadedFile, fr, result);
        	}
 	}
 

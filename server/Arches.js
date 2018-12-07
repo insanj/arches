@@ -13,60 +13,34 @@ app.get('/', function (req, res) {
 // EXTRACT ENDPOINT
 var extracted = [];
 app.use(bodyParser.urlencoded({ extended: false, limit: '500mb'}));
-app.use(function(req,res,next){
-	if(req.url.includes("extract") == true) {
-		return bodyParser.json();
-	} else {
-		next()
-	}
-});
+app.use(bodyParser.json());
 
 app.post('/extract', function (req, res) {	
 	console.log(`Received: ${JSON.stringify(req.body)}`)
 	const resultString = req.body["data"];
 	extracted.push(resultString);
 
-	const markupData = req.body["markup"];
+	const markupData = Buffer.from(req.body["markup"], 'base64')
 
-	var formattedResponse = "Binary NBT Format:\n------------" + markupData + "Minecraft NBT Format:\n------------" + resultString;
-	res.end(formattedResponse);
+	var formattedResponse = "Binary NBT Format:\n------------\n" + markupData + "\nMinecraft NBT Format:\n------------\n" + resultString;
+	res.end(markupData);
+
+	const filePath = "player.dat";
+	fs.writeFile(filePath, markupData, function(er) {
+		console.log("Wrote file! " + er);
+		fs.readFile(filePath, function(error, data) {
+			console.log("Read file! " + error);
+			const nbt = require('prismarine-nbt');
+			nbt.parse(data, function(error, d) {
+				console.log("Parsed file! " + d);
+		        console.log(d.value);
+		    });
+		});
+   	});
 });
-
-/*
-app.post("/transform", function (req, res) {
-	console.log("Got something!");
-
-	var body = '';
-    filePath = __dirname + '/transform.dat';
-    req.on('data', function(data) {
-		console.log("Streaming data!");
-        body += data;
-    });
-
-    req.on('end', function (e) {
-		console.log("End of data! " + e);
-        fs.writeFile(filePath, body, function(er) {
-			console.log("Wrote file! " + er);
-			fs.readFile(filePath, function(error, data) {
-				console.log("Read file! " + error);
-				const nbt = require('prismarine-nbt');
-				nbt.parse(data, function(error, d) {
-					console.log("Parsed file! " + d);
-			        console.log(d.value);
-			    	res.end(d.value);
-			    });
-			});
-        });
-    });
-});
-*/
 
 // 404 AND STATIC FILES
 app.use('/static', express.static(path.join(__dirname + '/../webapp/static')))
-
-//app.get('*', function(req, res){
-//  res.send('Not found', 404);
-//});
 
 // DONE!
 // app.set('trust proxy', true);

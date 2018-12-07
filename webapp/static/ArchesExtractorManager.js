@@ -1,5 +1,4 @@
 
-
 class ArchesExtractorManager {
 	constructor(completion) {
 		this.completion = completion;
@@ -19,7 +18,7 @@ class ArchesExtractorManager {
             arrayBuffer = this.result;
             try {
 	            let result = pako.ungzip(new Uint8Array(arrayBuffer), {"to": "string"});
-	            let resultJSON = {"data" : result, "markup" : markup};
+	            let resultJSON = {"data" : result, "markup" : btoa(markup)};
 	            var resultJSONString = JSON.stringify(resultJSON);
 	            console.log("Sending data " + resultJSONString);
 				$.ajax({
