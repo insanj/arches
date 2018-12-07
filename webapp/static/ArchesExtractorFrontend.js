@@ -14,7 +14,7 @@ class ArchesExtractorFrontend {
 	}
 
 	handleFinishedReadingTextFromFileUI(file, fr, markup) {
-        $(this.parentDivSelector).append("<button type='button' class='btn btn-primary' id='"+arches_extractButtonID+"'><i class='fa fa-cog' aria-hidden='true'></i> Begin Transformation</button>");
+        $(this.parentDivSelector).append("<button type='button' class='btn btn-primary' id='"+arches_extractButtonID+"'><i class='fa fa-cog' aria-hidden='true'></i> Finish Extraction</button>");
         var selfRef = this;
         $("#" + arches_extractButtonID).on("click", function(e) {
         	selfRef.extractorManager.handleExtractionFile(file, fr, markup);

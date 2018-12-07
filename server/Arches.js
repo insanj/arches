@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const fs = require("fs");
 const bodyParser = require('body-parser');
+const databaseFilename = "arches.db";
 
 // SERVE HOMEPAGE
 const path = require('path');
@@ -22,7 +23,7 @@ app.post('/extract', function (req, res) {
 
 	const markupData = Buffer.from(req.body["markup"], 'base64')
 
-	var formattedResponse = "\n\nBinary NBT Format:\n------------\n\n" + markupData + "\n\nMinecraft NBT Format:\n------------\n\n" + resultString;
+	var responseDict = {"binary": markupData, "nbt": resultString};
 
 	const filePath = "player.dat";
 	fs.writeFile(filePath, markupData, function(er) {
@@ -38,12 +39,24 @@ app.post('/extract', function (req, res) {
 		        var transformer = new ArchesTransformer(d);
 		        var transformerRendering = transformer.render();
 
-		        var responseString = "Arches Transformed JSON:\n------------\n\n" + transformerRendering;
-		        responseString += formattedResponse;
-	        	res.end(responseString);
+		        responseDict["json"] = transformerRendering;
+	        	res.end(JSON.stringify(responseDict));
 		    });
 		});
    	});
+});
+
+app.post('/transform', function (req, res) {	
+	const ArchesLoader = require('./ArchesLoader.js')
+	var loader = new ArchesLoader(databaseFilename);
+
+	loader.saveJSON(req.body, function (status) {
+		res.end(status);
+		/*console.log("2");
+		loader.renderDatabase(function (d) {
+			console.log("3");
+		});*/
+	});
 });
 
 // 404 AND STATIC FILES

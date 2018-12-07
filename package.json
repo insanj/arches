@@ -24,6 +24,7 @@
     "body-parser": "latest",
     "pako": "latest",
     "fs": "latest",
-    "prismarine-nbt": "latest"
+    "prismarine-nbt": "latest",
+    "pg": "latest"
   }
 }
