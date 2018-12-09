@@ -13,7 +13,9 @@ Configure PostgreSQL and open Admin at http://127.0.0.1:59126/browser/#.
 Open up webapp locally using http://localhost:8080/.
 
 
-Set up the SQL Cloud platform through Google Cloud and connect to the App Engine instance https://cloud.google.com/sql/docs/postgres/connect-app-engine. In addition to adding the permissions to the SQL Cloud API, you may need to open up the firewall https://cloud.google.com/community/tutorials/setting-up-postgres.
+Set up the SQL Cloud platform through Google Cloud and connect to the App Engine instance https://cloud.google.com/sql/docs/postgres/connect-app-engine. In addition to adding the permissions to the SQL Cloud API, you may need to open up the firewall https://cloud.google.com/community/tutorials/setting-up-postgres. Some tips can be found on StackOverflow https://stackoverflow.com/questions/48496999/gcloud-postgres-wont-connect-with-app-engine.
+
+> NOTE: if the TCP port for PostgreSQL is already in use, you can find and kill it using `netstat -vanp tcp | grep 5432`.
 
 ## What's included
 

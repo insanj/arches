@@ -86,11 +86,17 @@ class ArchesLoader {
 		var databaseUsername = process.env.SQL_USER;
 		var databasePassword = process.env.SQL_PASSWORD;
 		var databaseHost = process.env.INSTANCE_CONNECTION_NAME ? '/cloudsql/' + process.env.INSTANCE_CONNECTION_NAME : "localhost";
-		var databasePort = '5432';
+		var databasePort = 5432;
 		var databaseName = process.env.SQL_DATABASE;
-		var databaseConnectString = 'postgres://'+databaseUsername+':'+databasePassword+'@'+databaseHost+':'+databasePort+'/'+databaseName;
-		console.log("CONNECT STRING = " + databaseConnectString);
-		var db = pgp(databaseConnectString)
+		var databaseConfig = {
+		    host: databaseHost,
+		    port: databasePort,
+		    database: databaseName,
+		    user: databaseUsername,
+		    password: databasePassword
+		};
+
+		var db = pgp(databaseConfig);
 		var selfRef = this;
 
 		var inventoryItems = jsonToSave["inventory"];

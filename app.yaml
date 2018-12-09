@@ -10,9 +10,9 @@ resources:
   disk_size_gb: 10
 
 env_variables:
-  SQL_USER: postgres
-  SQL_PASSWORD: slide
-  SQL_DATABASE: arches
+  SQL_USER: webapp
+  SQL_PASSWORD: arches123
+  SQL_DATABASE: prod
   INSTANCE_CONNECTION_NAME: arches-224720:us-east1:arches
 
 beta_settings:
